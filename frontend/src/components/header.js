@@ -5,13 +5,13 @@ const Header = () => {
   const { isAuthenticated, user, logout } = useAuth();
 
   return (
-    <header className='bg-gray-800 text-white p-4 shadow-md flex justify-between items-center'>
-      <a href='/' className='text-2xl font-bold tracking-wider'>Overview</a>
+    <header className='bg-[#82968c] text-white p-4 shadow-md flex justify-between items-center'>
+      <a href='/' className='lg:text-2xl font-bold tracking-wider'>Overview</a>
       <nav>
         {isAuthenticated ? (
           <div className='flex items-center space-x-4'>
             <span className='text-lg'>Welcome, {user?.username || 'User'}!</span>
-            <button onClick={logout} className='bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-sm transition duration-150'>
+            <button onClick={logout} className='bg-[#c9eddc] px-3 py-1 rounded text-md font-medium transition duration-150 text-gray-600'>
               Logout
             </button>
           </div>

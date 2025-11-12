@@ -96,55 +96,137 @@ const Main = () => {
   }
 
   return (
-    <div className='w-full bg-gradient-to-b from-[#FAF8F1] to-[#FAEAB1]'>
-      <div className='flex mx-auto justify-center lg:max-w-[1440px]'>
-        <div className='flex flex-col h-full w-full'>
-          <div className='mt-16 px-5'>
-            <h1 className='text-2xl font-bold mb-4'>Balance: ${totalBalance}</h1>
-            <div className='flex justify-between p-4 bg-white rounded-lg shadow'>
-              <div className='text-center'>
-                <h4 className='text-green-500 font-semibold'>Income</h4>
-                <p className='text-lg'>+${income}</p>
+    <div className='w-full min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 pb-8'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8'>
+        {/* Header Section */}
+        <div className='text-center mb-8'>
+          <h1 className='text-4xl font-bold text-gray-900 mb-2'>Financial Dashboard</h1>
+          <p className='text-gray-600'>Track your income and expenses with ease</p>
+        </div>
+
+        {/* Balance Overview Cards */}
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mb-8'>
+          {/* Total Balance Card */}
+          <div className='bg-white rounded-2xl shadow-xl p-6 border border-emerald-100 relative overflow-hidden'>
+            <div className='absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full -translate-y-10 translate-x-10 opacity-50'></div>
+            <div className='relative z-10'>
+              <div className='flex items-center justify-between mb-2'>
+                <h3 className='text-sm font-semibold text-gray-600 uppercase tracking-wide'>Total Balance</h3>
+                <div className='w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full flex items-center justify-center'>
+                  <svg className='w-4 h-4 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1' />
+                  </svg>
+                </div>
               </div>
-              <div className='text-center border-l border-gray-200 pl-4'>
-                <h4 className='text-red-500 font-semibold'>Expense</h4>
-                <p className='text-lg'>-${expense}</p>
-              </div>
+              <p className={`text-3xl font-bold ${
+                parseFloat(totalBalance) >= 0 ? 'text-emerald-600' : 'text-red-600'
+              }`}>
+                ${totalBalance}
+              </p>
             </div>
           </div>
 
-          <div className="justify-end mt-8">
-            <Chart transactions={transactions} />
+          {/* Income Card */}
+          <div className='bg-white rounded-2xl shadow-xl p-6 border border-green-100 relative overflow-hidden'>
+            <div className='absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-100 to-emerald-100 rounded-full -translate-y-10 translate-x-10 opacity-50'></div>
+            <div className='relative z-10'>
+              <div className='flex items-center justify-between mb-2'>
+                <h3 className='text-sm font-semibold text-gray-600 uppercase tracking-wide'>Total Income</h3>
+                <div className='w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center'>
+                  <svg className='w-4 h-4 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M7 11l5-5m0 0l5 5m-5-5v12' />
+                  </svg>
+                </div>
+              </div>
+              <p className='text-3xl font-bold text-green-600'>+${income}</p>
+            </div>
           </div>
 
-          <div className='mt-8 px-5'>
-            <h3 className='font-bold text-xl mb-3'>Your Transactions</h3>
-            {dataLoading && <p>Loading transactions...</p>}
-            {error && <p className='error-message p-2 bg-red-100 text-red-700 rounded'>{error}</p>}
-            <div className='grid grid-cols-5 font-bold text-gray-700 border-b-2 border-gray-300 bg-gray-100 py-2 px-4 sticky top-0 z-10'>
-              <span>Description</span>
-              <span>Category</span>
-              <span>Amount</span>
-              <span>Date</span>
-              <span className='justify-self-center'>Actions</span>
+          {/* Expenses Card */}
+          <div className='bg-white rounded-2xl shadow-xl p-6 border border-red-100 relative overflow-hidden'>
+            <div className='absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-red-100 to-pink-100 rounded-full -translate-y-10 translate-x-10 opacity-50'></div>
+            <div className='relative z-10'>
+              <div className='flex items-center justify-between mb-2'>
+                <h3 className='text-sm font-semibold text-gray-600 uppercase tracking-wide'>Total Expenses</h3>
+                <div className='w-8 h-8 bg-gradient-to-r from-red-500 to-pink-600 rounded-full flex items-center justify-center'>
+                  <svg className='w-4 h-4 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M17 13l-5 5m0 0l-5-5m5 5V6' />
+                  </svg>
+                </div>
+              </div>
+              <p className='text-3xl font-bold text-red-600'>-${expense}</p>
             </div>
+          </div>
+        </div>
 
-            <ul className='list space-y-2'>
-              {transactions.length > 0 ? (
-                transactions.map(transaction => (
-                  <TransactionItem
-                    key={transaction._id}
-                    expense={transaction}
-                    onDelete={handleDeleteTransaction}
-                    onUpdate={handleUpdateTransaction}
-                  />
-                ))
-              ) : (
-                !dataLoading && !error && 
-                <p className='text-center px-4 py-2 mb-10 border border-b-2 border-solid border-gray-300 border-t-0 border-l-0 border-r-0'>No transactions found!</p>
-              )}
-            </ul>
+        {/* Main Content Grid */}
+        <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+          {/* Left Column - Add Transaction Form */}
+          <div className='lg:col-span-1'>
             <TransactionForm onAddTransaction={handleAddTransaction} />
+          </div>
+
+          {/* Right Column - Transactions and Chart */}
+          <div className='lg:col-span-2 space-y-8'>
+            {/* Chart Section */}
+            <div className='bg-white rounded-2xl shadow-xl p-6 border border-emerald-100'>
+              <h3 className='text-xl font-bold text-gray-900 mb-4'>Spending Overview</h3>
+              <Chart transactions={transactions} />
+            </div>
+
+            {/* Transactions Section */}
+            <div className='bg-white rounded-2xl shadow-xl border border-emerald-100 overflow-hidden'>
+              <div className='p-6 border-b border-gray-200'>
+                <h3 className='text-xl font-bold text-gray-900'>Recent Transactions</h3>
+                <p className='text-gray-600 text-sm mt-1'>Manage your income and expenses</p>
+              </div>
+              
+              <div className='p-6'>
+                {dataLoading && (
+                  <div className='text-center py-8'>
+                    <div className='inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-emerald-500 bg-emerald-100'>
+                      <svg className='animate-spin -ml-1 mr-3 h-5 w-5 text-emerald-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'>
+                        <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4'></circle>
+                        <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'></path>
+                      </svg>
+                      Loading transactions...
+                    </div>
+                  </div>
+                )}
+                
+                {error && (
+                  <div className='p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm flex items-center mb-4'>
+                    <svg className='w-4 h-4 mr-2' fill='currentColor' viewBox='0 0 20 20'>
+                      <path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z' clipRule='evenodd' />
+                    </svg>
+                    {error}
+                  </div>
+                )}
+
+                {transactions.length > 0 ? (
+                  <ul className='space-y-3'>
+                    {transactions.map(transaction => (
+                      <TransactionItem
+                        key={transaction._id}
+                        expense={transaction}
+                        onDelete={handleDeleteTransaction}
+                        onUpdate={handleUpdateTransaction}
+                      />
+                    ))}
+                  </ul>
+                ) : (
+                  !dataLoading && !error && (
+                    <div className='text-center py-12'>
+                      <svg className='mx-auto h-12 w-12 text-gray-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' />
+                      </svg>
+                      <h3 className='mt-2 text-sm font-medium text-gray-900'>No transactions</h3>
+                      <p className='mt-1 text-sm text-gray-500'>Get started by adding your first transaction.</p>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
